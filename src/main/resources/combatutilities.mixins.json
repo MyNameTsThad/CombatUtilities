@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "xyz.thaddev.combatutilities.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "bettergameselector.ClientPlayerInteractionManagerMixin",
+    "bettergameselector.SignRendererMixin",
+    "hitboxcolor.EntityRenderDispatcherMixin",
+    "hitboxcolor.MobEntityRendererMixin",
+    "hitboxcolor.PlayerEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
