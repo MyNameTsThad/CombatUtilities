@@ -1,13 +1,19 @@
 package xyz.thaddev.combatutilities;
 
+import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.MessageType;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.thaddev.combatutilities.features.Events;
+import xyz.thaddev.combatutilities.features.SignManager;
 import xyz.thaddev.combatutilities.features.WorldDetector;
+import xyz.thaddev.combatutilities.features.commands.CombatUtilitiesDebugCommand;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class CombatUtilities implements ClientModInitializer {
@@ -19,9 +25,7 @@ public class CombatUtilities implements ClientModInitializer {
     public static CombatUtilities instance;
     public MinecraftClient mc;
     public WorldDetector worldDetector;
-
-    //global features
-    public ArrayList<BlockPos> selectedSigns;
+    public SignManager signManager;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
@@ -31,6 +35,14 @@ public class CombatUtilities implements ClientModInitializer {
         instance = this;
         mc = MinecraftClient.getInstance();
         new CU();
+        worldDetector = new WorldDetector();
+        signManager = new SignManager();
+        Events.register();
+        registerCommands(ClientCommandManager.DISPATCHER);
+    }
+
+    public static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+        CombatUtilitiesDebugCommand.register(dispatcher);
     }
 
     public String getUUIDAsString() {
@@ -47,5 +59,9 @@ public class CombatUtilities implements ClientModInitializer {
         return null;
     }
 
-
+    public void printMessage(String message) {
+        if (mc != null && mc.inGameHud != null && mc.player != null) {
+            mc.inGameHud.addChatMessage(MessageType.CHAT, Text.of(message), getUUID());
+        }
+    }
 }

@@ -1,6 +1,10 @@
 package xyz.thaddev.combatutilities.util;
 
+import xyz.thaddev.combatutilities.CU;
+
 import java.awt.*;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 public class ColorHelper {
     public static String black = "\u00A70";
@@ -19,40 +23,46 @@ public class ColorHelper {
     public static String light_purple = "\u00A7d";
     public static String yellow = "\u00A7e";
     public static String white = "\u00A7f";
+    public static String obfuscated = "\u00A7k";
+    public static String bold = "\u00A7l";
+    public static String strikethrough = "\u00A7m";
+    public static String underline = "\u00A7n";
+    public static String italic = "\u00A7o";
+    public static String reset = "\u00A7r";
 
     public static String getColorFromCode(String color) {
-        //shut up it works dont complain
-        return switch (color) {
-            case "%$black" -> black;
-            case "%$dark_blue" -> dark_blue;
-            case "%$dark_green" -> dark_green;
-            case "%$dark_aqua" -> dark_aqua;
-            case "%$dark_red" -> dark_red;
-            case "%$dark_purple" -> dark_purple;
-            case "%$gold" -> gold;
-            case "%$gray" -> gray;
-            case "%$dark_gray" -> dark_gray;
-            case "%$blue" -> blue;
-            case "%$green" -> green;
-            case "%$aqua" -> aqua;
-            case "%$red" -> red;
-            case "%$light_purple" -> light_purple;
-            case "%$yellow" -> yellow;
-            default -> white;
-        };
+        try {
+            Field colorField = ColorHelper.class.getField(color.substring(2));
+            return colorField.get("").toString();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            CU.l.error(Arrays.toString(e.getStackTrace()));
+            return "";
+        }
     }
 
     public static String from(String fromText) {
-        String[] colors = fromText.split(" ");
-        StringBuilder builder = new StringBuilder();
-        for (String color : colors) {
-            if (color.startsWith("%$")) {
-                builder.append(getColorFromCode(color));
-            } else {
-                builder.append(color).append(" ");
+        return convert(fromText, dark_aqua + "[" + gold + "CombatUtilities" + dark_aqua + "] " + reset);
+    }
+
+    public static String fromNoTag(String fromText) {
+        return convert(fromText, "");
+    }
+
+    public static String convert(String fromText, String initial) {
+        char[] chars = fromText.toCharArray();
+        StringBuilder builder = new StringBuilder(initial);
+        int startIndex = 0;
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '(' && chars[i + 1] == '%' && chars[i + 2] == '$') {
+                startIndex = i + 1;
+            } else if (chars[i] == ')' && startIndex != 0) {
+                builder.append(getColorFromCode(fromText.substring(startIndex, i)));
+                startIndex = 0;
+            } else if (startIndex == 0) {
+                builder.append(chars[i]);
             }
         }
-        return builder.toString().trim();
+        return builder.toString();
     }
 
     public static int rgbToInteger(int red, int green, int blue, int alpha) {

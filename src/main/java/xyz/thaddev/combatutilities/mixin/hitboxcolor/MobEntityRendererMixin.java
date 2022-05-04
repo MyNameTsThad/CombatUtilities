@@ -17,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.thaddev.combatutilities.CU;
 import xyz.thaddev.combatutilities.features.RenderHelper;
 
+import java.awt.*;
+
 @Mixin(MobEntityRenderer.class)
 public class MobEntityRendererMixin {
     @Inject(method = "render(Lnet/minecraft/entity/mob/MobEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = {@At("HEAD")})
@@ -33,23 +35,23 @@ public class MobEntityRendererMixin {
                     boolean canBeBlocked = mobEntity.isBlocking() && vec3d3.dotProduct(vec3d2) < 0.0;
                     if (canBeBlocked) { // has their shield up
                         if (client.player.getMainHandStack().getItem() instanceof AxeItem) { // is using an axe
-                            RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, 1.0f, 1.0f, 0.0f, 0.4f);
+                            RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, new Color(1.0f, 1.0f, 0.0f, 0.4f));
                         } else {
-                            RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, 1.0f, 0.65f, 0.0f, 0.4f);
+                            RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, new Color(1.0f, 0.65f, 0.0f, 0.4f));
                         }
                     } else { // has their shield down
                         if (client.player.getAttackCooldownProgress(0.5f) > 0.9f) { // is fully charged
                             if (client.player.fallDistance > 0.0f && !client.player.isOnGround() && !client.player.isClimbing() && !client.player.isTouchingWater() && !client.player.hasStatusEffect(StatusEffects.BLINDNESS) && !client.player.hasVehicle() && !client.player.isSprinting()) { // is falling
-                                RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, 0.0f, 1.0f, 0.0f, 0.4f);
+                                RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, new Color(0.0f, 1.0f, 0.0f, 0.4f));
                             } else {
-                                RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, 1.0f, 1.0f, 0.0f, 0.4f);
+                                RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, new Color(1.0f, 1.0f, 0.0f, 0.4f));
                             }
                         } else {
-                            RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, 1.0f, 0.65f, 0.0f, 0.4f);
+                            RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, new Color(1.0f, 0.65f, 0.0f, 0.4f));
                         }
                     }
                 } else {
-                    RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, 1.0f, 0.0f, 0.0f, 0.4f);
+                    RenderHelper.drawBox(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getLines()), mobEntity, new Color(1.0f, 0.0f, 0.0f, 0.4f));
                 }
             }
         }
