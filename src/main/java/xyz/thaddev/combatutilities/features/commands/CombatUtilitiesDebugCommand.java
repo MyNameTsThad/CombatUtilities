@@ -3,12 +3,15 @@ package xyz.thaddev.combatutilities.features.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 import xyz.thaddev.combatutilities.CU;
 import xyz.thaddev.combatutilities.util.ColorHelper;
+
+import java.util.Objects;
 
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 
@@ -26,7 +29,7 @@ public class CombatUtilitiesDebugCommand {
                             boolean is2 = CU.i.mc.interactionManager.getCurrentGameMode() == GameMode.ADVENTURE;
                             CU.i.printMessage(ColorHelper.from("(%$dark_gray)    Sign Location: (%$gold)" + is));
                             CU.i.printMessage(ColorHelper.from("(%$dark_gray)    Is Adventure Mode: (%$gold)" + is2));
-                            CU.i.printMessage(ColorHelper.from("(%$dark_gray)    WorldDetector: (%$gold)" + CU.i.worldDetector.isPVPLegacyLobby()));
+                            CU.i.printMessage(ColorHelper.from("(%$dark_gray)    WorldDetector: (%$gold)" + CU.i.worldDetector.isInPVPLegacyLobby()));
                         }
                     }
                     return 0;
@@ -35,6 +38,17 @@ public class CombatUtilitiesDebugCommand {
                     if (CU.i.mc.world != null && CU.i.mc.crosshairTarget != null && CU.i.mc.crosshairTarget.getType() == HitResult.Type.BLOCK) {
                         BlockPos pos = new BlockPos(CU.i.mc.crosshairTarget.getPos());
                         CU.i.printMessage(ColorHelper.from("(%$dark_gray)Block: (%$gold)" + CU.i.mc.world.getBlockState(pos).getBlock()));
+                    }
+                    return 0;
+                }))
+                .then(literal("getsign").executes(context -> {
+                    if (CU.i.mc.world != null && CU.i.mc.crosshairTarget != null && CU.i.mc.crosshairTarget.getType() == HitResult.Type.BLOCK) {
+                        BlockPos pos = new BlockPos(CU.i.mc.crosshairTarget.getPos());
+                        if (CU.i.mc.world.getBlockState(pos).getBlock() == Blocks.WARPED_WALL_SIGN) {
+                            CU.i.printMessage(ColorHelper.from("(%$dark_gray)Text 1: (%$gold)" + ((SignBlockEntity) Objects.requireNonNull(CU.i.mc.world.getBlockEntity(pos))).getTextOnRow(0, false).getSiblings().get(0)));
+                            CU.i.printMessage(ColorHelper.from("(%$dark_gray)Text 2: (%$gold)" + ((SignBlockEntity) Objects.requireNonNull(CU.i.mc.world.getBlockEntity(pos))).getTextOnRow(0, false).getSiblings().get(1)));
+                            CU.i.printMessage(ColorHelper.from("(%$dark_gray)Text 3: (%$gold)" + ((SignBlockEntity) Objects.requireNonNull(CU.i.mc.world.getBlockEntity(pos))).getTextOnRow(0, false).getSiblings().get(2)));
+                        }
                     }
                     return 0;
                 })));

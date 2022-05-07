@@ -2,6 +2,7 @@ package xyz.thaddev.combatutilities.mixin.hitboxcolor;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -20,9 +21,25 @@ public class EntityRenderDispatcherMixin {
         MinecraftClient client = CU.i.mc;
 
         if (client.player != null && (entity instanceof VillagerEntity | entity instanceof PlayerEntity)) {
-            float distance = (float) client.player.squaredDistanceTo(entity);
-            if (distance <= 27f) {
-                ci.cancel();
+            double distance = Math.cbrt(client.player.squaredDistanceTo(entity));
+            if (distance <= 2.5d) {
+                if (!(entity instanceof PlayerEntity) || !entity.getUuidAsString().equals(client.player.getUuidAsString())) {
+                    ci.cancel();
+                }
+            }
+        }
+    }
+
+    @Inject(method = "renderFire", at = {@At("HEAD")}, cancellable = true)
+    private void renderFire(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity, CallbackInfo ci) {
+        MinecraftClient client = CU.i.mc;
+
+        if (client.player != null && (entity instanceof VillagerEntity | entity instanceof PlayerEntity)) {
+            double distance = Math.cbrt(client.player.squaredDistanceTo(entity));
+            if (distance <= 2.5d) {
+                if (!(entity instanceof PlayerEntity) || !entity.getUuidAsString().equals(client.player.getUuidAsString())) {
+                    ci.cancel();
+                }
             }
         }
     }

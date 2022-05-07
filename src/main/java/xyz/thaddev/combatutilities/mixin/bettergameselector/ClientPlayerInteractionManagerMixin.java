@@ -22,7 +22,7 @@ public class ClientPlayerInteractionManagerMixin {
     @Inject(method = "interactBlock", at = @At("HEAD"), cancellable = true)
     public void interactBlock(ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
         BlockPos blockPos = hitResult.getBlockPos();
-        if (CU.i.signManager.getSignPos() != null && CU.i.signManager.getSignPos().toShortString().equals(blockPos.toShortString())) {
+        if (CU.i.mc.player != null && CU.i.signManager.getSignPos() != null && CU.i.signManager.getSignPos().toShortString().equals(blockPos.toShortString()) && !CU.i.mc.player.isSneaking()) {
             if (CU.i.mc.player != null && !CU.i.mc.isInSingleplayer()) {
                 Objects.requireNonNull(CU.i.mc.getNetworkHandler()).sendPacket(new ChatMessageC2SPacket("/leave"));
                 CU.i.signManager.setSignPos(null);
@@ -31,7 +31,7 @@ public class ClientPlayerInteractionManagerMixin {
             cir.cancel();
             return;
         }
-        if (CU.i.worldDetector.isPVPLegacyLobby() && world.getBlockState(blockPos).getBlock() == Blocks.WARPED_WALL_SIGN) {
+        if (CU.i.mc.player != null && CU.i.worldDetector.isInPVPLegacyLobby() && world.getBlockState(blockPos).getBlock() == Blocks.WARPED_WALL_SIGN && !CU.i.mc.player.isSneaking()) {
             CU.i.signManager.setSignPos(blockPos);
         }
     }

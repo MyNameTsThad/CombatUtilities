@@ -10,12 +10,20 @@ public class WorldDetector {
     public WorldDetector() {
     }
 
-    public boolean isPVPLegacyLobby() {
+    public boolean isInPVPLegacyLobby() {
         if (CU.i.mc.player != null && !CU.i.mc.isInSingleplayer()) {
             ServerInfo serverInfo = CU.i.mc.getCurrentServerEntry();
             if (serverInfo != null && serverInfo.address.contains("play.pvplegacy.net") && CU.i.mc.interactionManager != null) {
                 return (CU.i.mc.player.world.getBlockState(new BlockPos(69762, 14, 70101)).getBlock() == Blocks.WARPED_WALL_SIGN) && (CU.i.mc.interactionManager.getCurrentGameMode() == GameMode.ADVENTURE);
             }
+        }
+        return false;
+    }
+
+    public boolean isInPVPLegacy() {
+        if (CU.i.mc.player != null && !CU.i.mc.isInSingleplayer()) {
+            ServerInfo serverInfo = CU.i.mc.getCurrentServerEntry();
+            return serverInfo != null && serverInfo.address.contains("play.pvplegacy.net");
         }
         return false;
     }

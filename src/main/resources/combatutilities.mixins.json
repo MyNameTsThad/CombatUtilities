@@ -8,7 +8,8 @@
     "bettergameselector.SignRendererMixin",
     "hitboxcolor.EntityRenderDispatcherMixin",
     "hitboxcolor.MobEntityRendererMixin",
-    "hitboxcolor.PlayerEntityRendererMixin"
+    "hitboxcolor.PlayerEntityRendererMixin",
+    "signstopper.WallSignBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -24,9 +24,9 @@ public class PlayerEntityRendererMixin {
     private void render(AbstractClientPlayerEntity targetPlayer, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         MinecraftClient client = CU.i.mc;
 
-        if (client.player != null) {
+        if (client.player != null && !targetPlayer.getUuidAsString().equals(client.player.getUuidAsString())) {
             double distance = Math.cbrt(client.player.squaredDistanceTo(targetPlayer));
-            if (distance <= 2.5d && client.player.canSee(targetPlayer)) { //is in reach
+            if (distance <= 2.5d && client.player.canSee(targetPlayer) && !targetPlayer.isSpectator()) { //is in reach
                 if (client.targetedEntity != null && client.targetedEntity.getUuidAsString().equals(targetPlayer.getUuidAsString())) { // is targeted
                     Vec3d vec3d = client.player.getPos();
                     Vec3d vec3d2 = targetPlayer.getRotationVec(1.0f);

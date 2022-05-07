@@ -20,7 +20,8 @@ public class CombatUtilities implements ClientModInitializer {
     public static final String MOD_ID = "combatutilities";
     public static final String MOD_NAME = "Combat Utilities";
     public static final String MOD_SNAME = "CombatUtilities";
-    public static final String MOD_VERSION = "0.1.0";
+    public static final String MOD_VERSION = "0.2.0";
+    public static final int MOD_VERSION_ID = 2;
 
     public static CombatUtilities instance;
     public MinecraftClient mc;
