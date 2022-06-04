@@ -18,7 +18,7 @@ public class SignManager {
 
     public SignManager() {
         signPos = null;
-        new Timer("checkScreen").scheduleAtFixedRate(new TimerTask() {
+        new Timer("checkScreen-SignManager").scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (CU.i.mc != null && signPos != null) {
@@ -69,6 +69,12 @@ public class SignManager {
                     if (entity != null && entity.getTextOnRow(3, false).getSiblings().size() > 0) {
                         float players = Float.parseFloat(String.valueOf(entity.getTextOnRow(2, false).getSiblings().get(0).asString().charAt(0)));
                         float maxPlayers = Float.parseFloat(String.valueOf(entity.getTextOnRow(2, false).getSiblings().get(0).asString().charAt(2)));
+                        try {
+                            float maxPlayers2 = Float.parseFloat(String.valueOf(entity.getTextOnRow(2, false).getSiblings().get(0).asString().charAt(3)));
+                            maxPlayers *= 10;
+                            maxPlayers += maxPlayers2;
+                        } catch (NumberFormatException ignored) {
+                        }
                         if ((players / maxPlayers) > 0.5) {
                             return new Color(1f - (players / maxPlayers), 1f, 0f, 0.6f);
                         } else {

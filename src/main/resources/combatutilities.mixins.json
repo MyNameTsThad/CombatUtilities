@@ -4,6 +4,8 @@
   "package": "xyz.thaddev.combatutilities.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "attackhelper.LivingEntityMixin",
+    "attackhelper.PlayerEntityMixin",
     "bettergameselector.ClientPlayerInteractionManagerMixin",
     "bettergameselector.SignRendererMixin",
     "hitboxcolor.EntityRenderDispatcherMixin",

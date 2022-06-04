@@ -9,10 +9,14 @@ import net.minecraft.network.MessageType;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.thaddev.combatutilities.features.AttackManager;
 import xyz.thaddev.combatutilities.features.Events;
 import xyz.thaddev.combatutilities.features.SignManager;
 import xyz.thaddev.combatutilities.features.WorldDetector;
 import xyz.thaddev.combatutilities.features.commands.CombatUtilitiesDebugCommand;
+import xyz.thaddev.combatutilities.features.hud.ArmorDurabilityWarnOverlay;
+import xyz.thaddev.combatutilities.features.hud.AttackingHud;
+import xyz.thaddev.combatutilities.util.Config;
 
 import java.util.UUID;
 
@@ -20,13 +24,15 @@ public class CombatUtilities implements ClientModInitializer {
     public static final String MOD_ID = "combatutilities";
     public static final String MOD_NAME = "Combat Utilities";
     public static final String MOD_SNAME = "CombatUtilities";
-    public static final String MOD_VERSION = "0.2.0";
-    public static final int MOD_VERSION_ID = 2;
+    public static final String MOD_VERSION = "0.3.0";
+    public static final int MOD_VERSION_ID = 3;
 
     public static CombatUtilities instance;
     public MinecraftClient mc;
+    public Config conf;
     public WorldDetector worldDetector;
     public SignManager signManager;
+    public AttackManager attackManager;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
@@ -36,9 +42,13 @@ public class CombatUtilities implements ClientModInitializer {
         instance = this;
         mc = MinecraftClient.getInstance();
         new CU();
+        conf = new Config();
         worldDetector = new WorldDetector();
         signManager = new SignManager();
+        attackManager = new AttackManager();
         Events.register();
+        AttackingHud.registerHUD();
+        ArmorDurabilityWarnOverlay.registerHUD();
         registerCommands(ClientCommandManager.DISPATCHER);
     }
 

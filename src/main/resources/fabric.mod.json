@@ -12,7 +12,7 @@
     "sources": "https://github.com/MyNameTsThad/CombatUtilities"
   },
   "license": "MIT",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/combatutilities/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [

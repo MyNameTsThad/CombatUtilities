@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.thaddev.combatutilities.CU;
-import xyz.thaddev.combatutilities.features.RenderHelper;
+import xyz.thaddev.combatutilities.util.RenderHelper;
 
 @Mixin(BlockEntityRenderDispatcher.class)
 public class SignRendererMixin {
@@ -18,7 +18,7 @@ public class SignRendererMixin {
     private void render(BlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, CallbackInfo ci) {
         if (CU.i.signManager != null && CU.i.signManager.getSignPos() != null && blockEntity.getPos().toShortString().equals(CU.i.signManager.getSignPos().toShortString())) {
             if (CU.i.signManager.checkSign()) {
-                RenderHelper.drawBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), blockEntity.getPos(), CU.i.signManager.getSignColor());
+                RenderHelper.drawSignBox(matrices, vertexConsumers.getBuffer(RenderLayer.LINES), blockEntity.getPos(), CU.i.signManager.getSignColor()/*, ((SignBlock)blockEntity.getWorld().getBlockState(blockEntity.getPos()).getBlock()).ROTATION.get*/);
             }
         }
     }
